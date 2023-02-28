@@ -1,0 +1,45 @@
+experiment_name: voc_MF_v4
+
+system:
+  gpus: [0, 1]
+  num_workers: 6
+
+dataset:
+  name: voc
+  train_txt_file: /home/eleflea/ramdata/Pascal_voc/train.txt
+  eval_txt_file: /home/eleflea/ramdata/Pascal_voc/2007_test.txt
+
+model:
+  # cfg_path: model/cfg/regnetx-600m-fpn.cfg
+  cfg_path: model/cfg/mobilenetv2-fpn.cfg
+
+train:
+  # scheduler: 'step'
+  max_epochs: 60
+  batch_size: 32
+  input_sizes: [608]
+  learning_rate_init: 1e-3
+  weight_decay: 5e-5
+
+weight:
+  backbone: weights/pretrained/mobilenetv2.pt
+  # resume: weights/VOC_newstd_regnet600m_pan_nolossscale/model-20.pt
+
+augment:
+  mixup_p: 0.
+  # hflip_p: 0.5
+  # crop_p: 0.65
+  color_p: 1.
+
+eval:
+  after: 40
+  batch_size: 80
+  input_size: 608
+  # partial: 5
+
+prune:
+  weight: weights/VOC_prune/model-0.pt
+  new_cfg: model/cfg/myolo-prune.cfg
+
+# sparse:
+#   switch: on

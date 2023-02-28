@@ -1,0 +1,58 @@
+experiment_name: coco_pcspnetv4-spp-pan-amp-200
+
+system:
+  gpus: [0]
+  num_workers: 10
+
+dataset:
+  name: coco
+  train_txt_file: /datasets/COCO/trainvalno5k.txt
+  eval_txt_file: /datasets/COCO/5k.txt
+  classes: ['person', 'bicycle', 'car', 'motorbike', 'aeroplane', 'bus', 'train', 'truck',
+    'boat', 'traffic light', 'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat',
+    'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe',
+    'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard',
+    'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 'bottle',
+    'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
+    'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake',
+    'chair', 'sofa', 'pottedplant', 'bed', 'diningtable', 'toilet', 'tvmonitor', 'laptop',
+    'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink',
+    'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
+
+model:
+  cfg_path: model/cfg/pcspnetv4-spp-pan-coco.cfg
+  anchors_iou_threshold: 0.3
+
+train:
+  # scheduler: 'step'
+  warmup_epochs: 3
+  max_epochs: 200
+  batch_size: 16
+  input_sizes: [608]
+  learning_rate_init: 1e-3
+  # weight_decay: 2e-3
+
+weight:
+  backbone: ''
+  # resume: weights/coco_regnet600m_fpn/model-25.pt
+
+augment:
+  mixup_p: 0.
+  # hflip_p: 0.5
+  # crop_p: 0.65
+  color_p: 1.
+
+eval:
+  after: 0
+  batch_size: 30
+  input_size: 608
+  # partial: 10000
+  iou_threshold: 0.6
+
+prune:
+  weight: weights/VOC_prune/model-0.pt
+  new_cfg: model/cfg/myolo-prune.cfg
+
+sparse:
+  switch: off
+  ratio: 10.

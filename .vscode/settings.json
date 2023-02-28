@@ -1,0 +1,11 @@
+{
+    "python.pythonPath": "/home/eleflea/.pyenv/versions/3.7.4/bin/python",
+    "files.associations": {
+        "memory_resource": "cpp",
+        "fstream": "cpp",
+        "memory": "cpp",
+        "sstream": "cpp",
+        "*.tcc": "cpp",
+        "array": "cpp"
+    }
+}

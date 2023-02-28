@@ -1,0 +1,49 @@
+experiment_name: flir_pcspnetv4-spp-pan
+
+system:
+  gpus: [0]
+  num_workers: 8
+
+dataset:
+  name: flir
+  train_txt_file: /home/tjz/FLIR-tiny/train.txt
+  eval_txt_file: /home/tjz/FLIR-tiny/val.txt
+  classes: [ '1', '2', '3' ]
+
+model:
+  cfg_path: model/cfg/pcspnet-spp-pan-flir.cfg
+  anchors_iou_threshold: 0.3
+
+train:
+  # scheduler: 'step'
+  warmup_epochs: 3
+  max_epochs: 200
+  batch_size: 16
+  input_sizes: [512]
+  learning_rate_init: 1e-3
+  # weight_decay: 2e-3
+
+weight:
+  backbone: ''
+  # resume: weights/coco_regnet600m_fpn/model-25.pt
+
+augment:
+  mixup_p: 0.
+  # hflip_p: 0.5
+  # crop_p: 0.65
+  color_p: 1.
+
+eval:
+  after: 0
+  batch_size: 16
+  input_size: 512
+  # partial: 10000
+  iou_threshold: 0.6
+
+prune:
+  weight: weights/VOC_prune/model-0.pt
+  new_cfg: model/cfg/myolo-prune.cfg
+
+sparse:
+  switch: off
+  ratio: 10.
